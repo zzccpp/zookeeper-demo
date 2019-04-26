@@ -1,5 +1,7 @@
 package cn.zcp.demo;
 
+import java.util.Date;
+
 /**
  * Hello world!
  *
@@ -7,5 +9,7 @@ package cn.zcp.demo;
 public class App{
     public static void main( String[] args ){
         System.out.println( "Hello World!" );
+        Date date = new Date();
+        System.out.println(date.toLocaleString());
     }
 }
