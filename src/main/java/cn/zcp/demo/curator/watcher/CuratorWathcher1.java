@@ -5,6 +5,7 @@ import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.cache.NodeCache;
 import org.apache.curator.framework.recipes.cache.NodeCacheListener;
 import org.apache.curator.retry.ExponentialBackoffRetry;
+import org.apache.zookeeper.data.Stat;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -29,6 +30,9 @@ public class CuratorWathcher1 {
         cf.start();
 
         Executor executor = Executors.newFixedThreadPool(3);
+
+        Stat stat = cf.checkExists().forPath("/nodeCache");
+        if(null!=stat)cf.delete().deletingChildrenIfNeeded().forPath("/nodeCache");
 
         NodeCache nodeCache = new NodeCache(cf,"/nodeCache");
 
