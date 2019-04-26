@@ -50,6 +50,7 @@ public class CuratorWathcher1 {
         cf.setData().forPath("/nodeCache","cccc".getBytes());
 
         Thread.sleep(50000);
+
         cf.close();
     }
 }
