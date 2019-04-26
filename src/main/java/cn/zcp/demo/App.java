@@ -11,5 +11,6 @@ public class App{
         System.out.println( "Hello World!" );
         Date date = new Date();
         System.out.println(date.toLocaleString());
+		date = new Date();
     }
 }
