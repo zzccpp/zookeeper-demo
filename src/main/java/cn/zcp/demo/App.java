@@ -12,5 +12,7 @@ public class App{
         Date date = new Date();
         System.out.println(date.toLocaleString());
 		date = new Date();
+        int x = 78;
+        System.out.println(x);
     }
 }
