@@ -3,6 +3,7 @@ package cn.zcp.demo.curator;
 import org.apache.curator.RetryPolicy;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.apache.curator.framework.api.CuratorWatcher;
 import org.apache.curator.retry.ExponentialBackoffRetry;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
@@ -35,7 +36,15 @@ public class CuratorBase{
         cf.create().forPath("/super");
         System.out.println("使用curator创建super节点");
 
-        cf.create().withMode(CreateMode.EPHEMERAL).forPath("/super/temp");
+        //只会触发一次
+        cf.getData().usingWatcher((CuratorWatcher) event ->
+            System.out.println("触发了watcher事件，节点路径为："+event.getPath()+"，事件类型为："+event.getType()))
+        .forPath("/super");
+
+        cf.setData().forPath("/super","123".getBytes());
+        cf.setData().forPath("/super","4444".getBytes());
+
+        cf.create()/*.withProtection()*/.withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath("/super/temp");
         System.out.println("使用curator创建临时super/temp节点");
 
         cf.create().creatingParentContainersIfNeeded().forPath("/super/ccc/ddd");
