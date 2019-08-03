@@ -12,6 +12,17 @@ import java.util.concurrent.CountDownLatch;
  * @version 1.0
  * @Time 2019-04-21 16:52
  * @describe demo-parent 使用原生
+ *
+ * 1、如何注册事件机制
+ *      通过这三个操作来绑定事件： getData、Exits、getChildren
+ *
+ *      注意:如果给的是  true ，则默认使用的是全局new ZooKeeper 中的watcher
+ * 2、如何触发事件
+ *      凡是事物类型的操作，都会触发监听事件： create、setData、delete
+ *
+ *
+ *
+ *
  */
 public class ZookeeperBase {
 
@@ -54,6 +65,14 @@ public class ZookeeperBase {
         //获取节点的值
         byte[] data = zooKeeper.getData("/demo-root", false, null);
         System.out.println("获取根节点demo-root的值为:"+new String(data,ENCODING));
+
+
+        Stat stat = new Stat();
+        zooKeeper.getData("/demo-root", false, stat);
+        //stat会会获取节点的所有状态信息
+        zooKeeper.setData("/demo-root","xx".getBytes(),stat.getVersion());//带version  则使用乐观锁
+
+
         //获取子节点信息
         List<String> childrens = zooKeeper.getChildren("/demo-root", false, null);
         String nodePath;
@@ -75,6 +94,15 @@ public class ZookeeperBase {
 
         //判断节点是否存在
         Stat exists = zooKeeper.exists("/demo-root/children1", null);
+
+        /*Stat exists = zooKeeper.exists("/demo-root/children1", true);//绑定事件，使用全局wather
+        Stat exists = zooKeeper.exists("/demo-root/children1", new Watcher() {
+            @Override
+            public void process(WatchedEvent watchedEvent) {
+                //绑定事件，处理事件，再次绑定
+            }
+        });*///
+
         System.out.println(exists);
         Thread.sleep(30000);
         zooKeeper.close();

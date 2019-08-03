@@ -30,7 +30,7 @@ public class CuratorBase{
     public static void main(String[] args) throws Exception {
 
         RetryPolicy retryPolicy = new ExponentialBackoffRetry(1000,3);//尝试3次，间隔1s
-        CuratorFramework cf = CuratorFrameworkFactory.newClient(ZOOKEEPER_HOST,retryPolicy);
+        CuratorFramework cf = CuratorFrameworkFactory.newClient(ZOOKEEPER_HOST,retryPolicy);//.usingNamespace("/xxx").build();
         cf.start();
 
         cf.create().forPath("/super");
